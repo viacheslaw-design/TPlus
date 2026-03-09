@@ -92,7 +92,7 @@
 <body>
 
     <h2>Зависимость потребления тепловой энергии от температуры</h2>
-    <p class="subtitle">Данные по лицевому счету (ОДПУ) г. Саратов: 2024 - 2026 гг.</p>
+    <p class="subtitle">Данные по лицевому счету (квартира) г. Саратов: 2024 - 2026 гг.</p>
     
     <!-- Блок с графиком -->
     <div class="container">
@@ -117,22 +117,22 @@
                 <tr>
                     <td>Январь 2024</td>
                     <td class="col-heat">1.282613</td>
-                    <td class="col-temp">-11.5</td>
+                    <td class="col-temp">-9.0</td>
                 </tr>
                 <tr>
                     <td>Февраль 2024</td>
                     <td class="col-heat">1.209745</td>
-                    <td class="col-temp">-12.0</td>
+                    <td class="col-temp">-8.1</td>
                 </tr>
                 <tr>
                     <td>Январь 2025</td>
                     <td class="col-heat">0.961187</td>
-                    <td class="col-temp">+1.0</td>
+                    <td class="col-temp">-2.5</td>
                 </tr>
                 <tr>
                     <td>Февраль 2025</td>
                     <td class="col-heat">1.017467</td>
-                    <td class="col-temp">-6.5</td>
+                    <td class="col-temp">-7.7</td>
                 </tr>
                 <tr>
                     <td>Январь 2026</td>
@@ -142,7 +142,7 @@
                 <tr>
                     <td>Февраль 2026</td>
                     <td class="col-heat">1.650005</td>
-                    <td class="col-temp">-14.1</td>
+                    <td class="col-temp">-11.5</td>
                 </tr>
             </tbody>
         </table>
@@ -151,15 +151,15 @@
     <script>
         const ctx = document.getElementById('heatingChart').getContext('2d');
         
-        const labels =['Январь 2024', 'Февраль 2024', 'Январь 2025', 'Февраль 2025', 'Январь 2026', 'Февраль 2026'];
-        const consumptionData =[1.282613, 1.209745, 0.961187, 1.017467, 1.481396, 1.650005];
-        const tempData =[-11.5, -12.0, 1.0, -6.5, -9.7, -14.1];
+        const labels = ['Январь 2024', 'Февраль 2024', 'Январь 2025', 'Февраль 2025', 'Январь 2026', 'Февраль 2026'];
+        const consumptionData = [1.282613, 1.209745, 0.961187, 1.017467, 1.481396, 1.650005];
+        const tempData = [-9.0, -8.1, -2.5, -7.7, -9.7, -11.5]; // Обновлено по метеосводке
 
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets:[
+                datasets: [
                     {
                         label: 'Объем потребления (Гкал)',
                         data: consumptionData,
@@ -204,7 +204,6 @@
                                 let label = context.dataset.label || '';
                                 if (label) { label += ': '; }
                                 if (context.parsed.y !== null) {
-                                    // Изменено округление с toFixed(4) на toFixed(6) для точного совпадения с таблицей
                                     label += context.dataset.yAxisID === 'y' ? 
                                         context.parsed.y.toFixed(6) + ' Гкал' : 
                                         (context.parsed.y > 0 ? '+' : '') + context.parsed.y + ' °C';
@@ -243,8 +242,8 @@
                             font: { size: 14, weight: 'bold' }
                         },
                         grid: { drawOnChartArea: false },
-                        suggestedMin: -20,
-                        suggestedMax: 5
+                        suggestedMin: -15,
+                        suggestedMax: 0
                     }
                 }
             }
