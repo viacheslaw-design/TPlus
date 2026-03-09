@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аналитика: Отопление и Погода (Саратов)</title>
+    <!-- Подключаем библиотеку Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 30px 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .container {
+            width: 90vw;
+            max-width: 1000px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            position: relative;
+            height: 50vh;
+            width: 100%;
+        }
+        
+        /* Стили для таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+        th, td {
+            padding: 14px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover {
+            background-color: #f1f4f6;
+            transition: background-color 0.2s ease;
+        }
+        /* Цветовые акценты в таблице */
+        .col-heat {
+            color: #c0392b;
+            font-weight: 500;
+        }
+        .col-temp {
+            color: #2980b9;
+            font-weight: 500;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Зависимость потребления тепловой энергии от температуры</h2>
+    <p class="subtitle">Данные по лицевому счету (ОДПУ) г. Саратов: 2024 - 2026 гг.</p>
+    
+    <!-- Блок с графиком -->
+    <div class="container">
+        <h3>График потребления</h3>
+        <div class="chart-container">
+            <canvas id="heatingChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Блок с таблицей -->
+    <div class="container">
+        <h3>Детализация данных</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Период</th>
+                    <th>Объем потребления (Гкал)</th>
+                    <th>Средняя температура (°C)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Январь 2024</td>
+                    <td class="col-heat">1.282613</td>
+                    <td class="col-temp">-11.5</td>
+                </tr>
+                <tr>
+                    <td>Февраль 2024</td>
+                    <td class="col-heat">1.209745</td>
+                    <td class="col-temp">-12.0</td>
+                </tr>
+                <tr>
+                    <td>Январь 2025</td>
+                    <td class="col-heat">0.961187</td>
+                    <td class="col-temp">+1.0</td>
+                </tr>
+                <tr>
+                    <td>Февраль 2025</td>
+                    <td class="col-heat">1.017467</td>
+                    <td class="col-temp">-6.5</td>
+                </tr>
+                <tr>
+                    <td>Январь 2026</td>
+                    <td class="col-heat">1.481396</td>
+                    <td class="col-temp">-9.7</td>
+                </tr>
+                <tr>
+                    <td>Февраль 2026</td>
+                    <td class="col-heat">1.650005</td>
+                    <td class="col-temp">-14.1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('heatingChart').getContext('2d');
+        
+        const labels =['Январь 2024', 'Февраль 2024', 'Январь 2025', 'Февраль 2025', 'Январь 2026', 'Февраль 2026'];
+        const consumptionData =[1.282613, 1.209745, 0.961187, 1.017467, 1.481396, 1.650005];
+        const tempData =[-11.5, -12.0, 1.0, -6.5, -9.7, -14.1];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets:[
+                    {
+                        label: 'Объем потребления (Гкал)',
+                        data: consumptionData,
+                        backgroundColor: 'rgba(231, 76, 60, 0.7)',
+                        borderColor: 'rgba(192, 57, 43, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        yAxisID: 'y',
+                        order: 2
+                    },
+                    {
+                        label: 'Средняя температура (°C)',
+                        data: tempData,
+                        type: 'line',
+                        backgroundColor: 'rgba(52, 152, 219, 1)',
+                        borderColor: 'rgba(41, 128, 185, 1)',
+                        borderWidth: 3,
+                        pointRadius: 6,
+                        pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                        pointBorderColor: 'rgba(41, 128, 185, 1)',
+                        pointBorderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'y1',
+                        order: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 14 },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed.y !== null) {
+                                    // Изменено округление с toFixed(4) на toFixed(6) для точного совпадения с таблицей
+                                    label += context.dataset.yAxisID === 'y' ? 
+                                        context.parsed.y.toFixed(6) + ' Гкал' : 
+                                        (context.parsed.y > 0 ? '+' : '') + context.parsed.y + ' °C';
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        labels: { font: { size: 14 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Потребление тепла (Гкал)',
+                            color: 'rgba(192, 57, 43, 1)',
+                            font: { size: 14, weight: 'bold' }
+                        },
+                        min: 0,
+                        suggestedMax: 1.8
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Температура (°C)',
+                            color: 'rgba(41, 128, 185, 1)',
+                            font: { size: 14, weight: 'bold' }
+                        },
+                        grid: { drawOnChartArea: false },
+                        suggestedMin: -20,
+                        suggestedMax: 5
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
